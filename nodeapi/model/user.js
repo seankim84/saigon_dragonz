@@ -49,10 +49,11 @@ userSchema.virtual('password')
 
 // methods
 userSchema.methods = {
-
-    authenticate: function(plainText) { // userInput === plainText
-        return this.encryptPassword(plainText) === this.hashedPassword
+    // authenticate가 되기위해선 plainText(입력받은 비밀번호) 가 hashedPassword와 일치해야한다
+    authenticated: function(plainText) { // userInput === plainText
+        return this.encryptPassword(plainText) === this.hashedPassword;
     },
+
     encryptPassword: function(password){
         if(!password){
             return ""
