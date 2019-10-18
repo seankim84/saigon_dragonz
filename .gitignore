@@ -1,3 +1,6 @@
-nodeapi/node_modules
-nodeapi/.env
-frontend/node_modules
+/nodeapi/node_modules
+/nodeapi/.env
+/frontend/node_modules
+/frontend/build
+/frontend/.gitignore
+/frontend/*.lock

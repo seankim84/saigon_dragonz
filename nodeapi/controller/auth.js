@@ -26,8 +26,20 @@ exports.signup = async (req, res) => {
 
 exports.singin = (req, res) => {
     //find the user based on the Email
-    User.find(req.body.email)
-    //If error or no user
+    const { email, password } = req.body;
+    User.findOne({email}, (err, user) => {
+        // If error or no user
+        if(err || !user){
+            return res.status(401).json({ // 401 means unAuthorized
+                error: 'Email이 등록되지 않았습니다 회원가입을 해주세요'
+            })
+        }
+        // if user is found make sure the email and password matched;
+        // create authentication method in model and use here
+        
+    })
+
+   
 
     //If user found, user Authenticated(generate the token with id and secret)
 
