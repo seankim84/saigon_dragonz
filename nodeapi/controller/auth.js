@@ -24,7 +24,7 @@ exports.signup = async (req, res) => {
     }
 };
 
-exports.singin = (req, res) => {
+exports.signin = (req, res) => {
     //find the user based on the Email
     const { email, password } = req.body;
     User.findOne({ email }, (err, user) => { //user = User model을 받아온다
@@ -41,7 +41,7 @@ exports.singin = (req, res) => {
                 error: "비밀번호가 일치하지 않습니다"
             })
         };
-        //If user found, user Authenticated(generate the token with id and secret)
+        // If user found, user Authenticated(generate the token with id and secret)
         // generate the token with user id and secret
         const token = jwt.sign({_id: user._id}, process.env.JWT_SECRET);
         // persist the token as 't' in cookie with expiry day (* Need to 'cookie-parser' *)
@@ -50,12 +50,10 @@ exports.singin = (req, res) => {
         const { _id, name, email } = user;
         return res.json({ token, user: {_id, email, name} })
     })
+};
 
-   
-
-
-
-
-    
-
-}
+exports.signout = (req, res) => {
+    // req가 아니다....
+    res.clearCookie("t");
+    return res.json({ message: '로그아웃하셨습니다!' })
+};

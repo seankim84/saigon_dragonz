@@ -40,6 +40,5 @@ app.use(expressValidator());
 app.use('/', authRoutes);
 app.use('/', postRoutes);
 
-
 const port = process.env.PORT || 8000;
 app.listen(port, () => console.log(`Server Listen ${port}`));
