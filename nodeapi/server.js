@@ -28,13 +28,12 @@ mongoose.connection.on('error', err => {
 const authRoutes = require('./routes/auth');
 const postRoutes = require('./routes/post');
 
-
 //middleware => route 보다 먼저 선언
-app.use(morgan('dev'));
-app.use(bodyParser.json());
+app.use(morgan('dev')); // check the connection status
+app.use(bodyParser.json()); // for Json Parser
 app.use(cookieParser());
 app.use(cors()); // For cross-site HTTP
-app.use(expressValidator());
+app.use(expressValidator()); // validation all I inputs
 
 
 //Routes
