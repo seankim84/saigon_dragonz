@@ -51,7 +51,9 @@ userSchema.virtual('password')
 userSchema.methods = {
     // authenticate가 되기위해선 plainText(입력받은 비밀번호) 가 hashedPassword와 일치해야한다
     authenticated: function(plainText) { // userInput === plainText
-        return this.encryptPassword(plainText) === this.hashedPassword;
+        if(this.encryptPassword(plainText) === this.hashedPassword){
+            return this.hashedPassword
+        } //"same meaning this = "return this.encryptPassword(plainText) === this.hashedPassword;
     },
 
     encryptPassword: function(password){
