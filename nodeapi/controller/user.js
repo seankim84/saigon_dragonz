@@ -42,8 +42,9 @@ exports.getUser = (req, res) => {
 
 exports.updateUser = (req, res, next) => {
     let user = req.profile;
+    //객체를 복사해와서 요청되는 값으로 바꾼다음 다시 넣어준다('바꿀객체', '요청된 값')
     user = _.extend(user, req.body) // extend - mutate the source object
-    user.updated = Date.now();
+    user.updatedAt = Date.now();
     user.save((err) => {
         if(err){
             return res.status(400).json({
@@ -55,3 +56,17 @@ exports.updateUser = (req, res, next) => {
         res.json({user});
     });
 };
+
+exports.deleteUser = (req, res, next) => {
+    let user = req.profile;
+    user.remove((err, user) => {
+        if(err){
+            return res.status(400).json({
+                error: err
+            })
+        }
+        req.profile.hashedPassword = undefined;
+        req.profile.salt = undefined;
+        res.json({message: "User deleted successfully"});
+    });
+} 
