@@ -27,7 +27,7 @@ mongoose.connection.on('error', err => {
 //Bring Routes
 const authRoutes = require('./routes/auth');
 const postRoutes = require('./routes/post');
-
+const userRoutes = require('./routes/user');
 //middleware => route 보다 먼저 선언
 app.use(morgan('dev')); // check the connection status
 app.use(bodyParser.json()); // for Json Parser
@@ -39,6 +39,7 @@ app.use(expressValidator()); // validation all I inputs
 //Routes
 app.use('/', authRoutes);
 app.use('/', postRoutes);
+app.use('/', userRoutes);
 app.use(function (err, req, res, next) { // middleware를 check(signin or not) 해야 하기때문에 auth와 postRoute 뒤에 붙여준다 
     if (err.name === 'UnauthorizedError') {
         res.status(401).json({
