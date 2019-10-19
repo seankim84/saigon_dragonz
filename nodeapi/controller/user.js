@@ -69,4 +69,4 @@ exports.deleteUser = (req, res, next) => {
         req.profile.salt = undefined;
         res.json({message: "User deleted successfully"});
     });
-} 
+};
