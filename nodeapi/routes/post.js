@@ -8,8 +8,9 @@ const validator = require('../validator');
 router.get('/', getPosts);
 router.post('/post/new/:userId', 
     requireSignin, 
-    // validator.createPostValidator,
-    createPost
+    
+    createPost,
+    validator.createPostValidator
 ); 
 
 router.param('userId', userById);
