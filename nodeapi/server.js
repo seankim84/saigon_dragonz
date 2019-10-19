@@ -43,7 +43,7 @@ app.use('/', userRoutes);
 app.use(function (err, req, res, next) { // middleware를 check(signin or not) 해야 하기때문에 auth와 postRoute 뒤에 붙여준다 
     if (err.name === 'UnauthorizedError') {
         res.status(401).json({
-            error: '등록된 사용자가 아닙니다'
+            error: '당신은 등록된 사용자가 아닙니다'
         })
     };
 })

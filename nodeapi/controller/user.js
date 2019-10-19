@@ -13,6 +13,7 @@ exports.userById = (req, res, next, id) => {
 };
 
 exports.hasAuthorization = (req, res, next) => {
+    // 사용이유: 로그인은 되었지만 자기 개인정보를 변경하려고할때 내 자신이 맞는지 체크
     const authorized = req.profile && req.auth && req.profile._id === req.auth._id;
     if(!authorized) {
         return res.status(403).json({ //403 means unAuthorized 
@@ -30,4 +31,10 @@ exports.allUsers = (req, res) => {
         };
         res.json({users})
     }).select('name email updatedAt createdAt');
-}
+};
+
+exports.getUser = (req, res) => {
+    req.profile.hashedPassword  = undefined;
+    req.profile.salt = undefined;
+    return res.json(req.profile) 
+};

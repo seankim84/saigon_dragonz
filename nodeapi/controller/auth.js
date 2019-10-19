@@ -53,7 +53,7 @@ exports.signin = (req, res) => {
 };
 
 exports.signout = (req, res) => {
-    // req가 아니다....
+    // req.clearCookie 가 아니다....
     res.clearCookie("t");
     return res.json({ message: '로그아웃하셨습니다!' })
 };
