@@ -10,4 +10,13 @@ exports.userById = (req, res, next, id) => {
         req.profile = user; // this is the userId
         next();
     })
-}
+};
+
+exports.hasAuthorization = (req, res, next) => {
+    const authorized = req.profile && req.auth && req.profile._id === req.auth._id;
+    if(!authorized) {
+        return res.status(403).json({ //403 means unAuthorized 
+            error: "이 User는 이곳에 접근권한이 없습니다"
+        });
+    };
+};

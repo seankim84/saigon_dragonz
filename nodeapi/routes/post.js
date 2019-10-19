@@ -9,5 +9,5 @@ router.get('/', getPosts);
 router.post('/post', validator.createPostValidator, requireSignin, createPost);
 
 router.param('userId', userById);
-
+ 
 module.exports = router;
