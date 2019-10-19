@@ -6,7 +6,11 @@ const { userById } = require('../controller/user');
 const validator = require('../validator');
 
 router.get('/', getPosts);
-router.post('/post', requireSignin, validator.createPostValidator, createPost);
+router.post('/post/new/:userId', 
+    requireSignin, 
+    // validator.createPostValidator,
+    createPost
+); 
 
 router.param('userId', userById);
  

@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { ObjectId } = mongoose.Schema;
 
 const postSchema = new mongoose.Schema({
     title: {
@@ -15,7 +16,8 @@ const postSchema = new mongoose.Schema({
     },
     photo: {
         data: Buffer, // data는 binary type이 되므로
-    },
+        contentType: String
+    },  
     postedBy: {
         type: ObjectId,
         ref: "User"
