@@ -1,6 +1,7 @@
 const Post = require('../model/post');
 const formidable = require('formidable');
 const fs = require('fs');
+const _ = require('lodash');
 
 // post에서 postedById(그 포스트를 작성한 user) 가져오기(수정 삭제등 할 때 사용)
 exports.postById = (req, res, next, id) => {
@@ -20,9 +21,11 @@ exports.postById = (req, res, next, id) => {
 
 // 해당  포스트의 주인인지 아닌지 확인
 exports.isPoster = (req, res, next) => {
+    // req.auth._id 와 req.post.postedBy._id를 비교해보면 서로 type이 다르기때문에('==')로 비교한다
     let isPoster = req.post && req.auth && req.post.postedBy._id == req.auth._id;
-    console.log(req.auth);
-    console.log(req.post.postedBy._id);
+    // req.auth는 requireSignin 의 userProperty: 'auth'로 부터 나온다
+    // console.log(req.auth);
+    // console.log(req.post.postedBy._id);
     if (!isPoster) {
         return res.status(403).json({
             error: "당신은 이 동작을 수행할 권한이 없습니다"
@@ -43,6 +46,21 @@ exports.deletePost = (req, res) => {
             message: 'Post deleted successfully'
         });
     });
+};
+
+exports.updatePost = (req, res, next) => {
+    // form-urlencoded 가 아니라 json 방식
+    let post = req.post;
+    post = _.extend(post, req.body)
+    post.updated = Date.now();
+    post.save(err => {
+        if(err){
+            return res.status(400).json({
+                error: err
+            });
+        };
+    });
+    res.json({post});
 }
 
 
