@@ -3,7 +3,6 @@ const formidable = require('formidable');
 const fs = require('fs');
 
 // post에서 postedById(그 포스트를 작성한 user) 가져오기(수정 삭제등 할 때 사용)
-// for route params
 exports.postById = (req, res, next, id) => {
     Post.findById(id)
     .populate('postedBy', '_id name')
@@ -13,10 +12,39 @@ exports.postById = (req, res, next, id) => {
                 error: err
             })
         }
-        req.post = post
-        next();
+        req.post = post // 이 부분 중요!(user.js에서 req.profile 과 같은 부분) 
+         next();
     });
+   
 };
+
+// 해당  포스트의 주인인지 아닌지 확인
+exports.isPoster = (req, res, next) => {
+    let isPoster = req.post && req.auth && req.post.postedBy._id == req.auth._id;
+    console.log(req.auth);
+    console.log(req.post.postedBy._id);
+    if (!isPoster) {
+        return res.status(403).json({
+            error: "당신은 이 동작을 수행할 권한이 없습니다"
+        });
+    }
+    next();
+};
+
+exports.deletePost = (req, res) => {
+    let post = req.post;
+    post.remove((err, post) => {
+        if (err) {
+            return res.status(400).json({
+                error: err
+            })
+        }
+        res.json({
+            message: 'Post deleted successfully'
+        });
+    });
+}
+
 
 exports.getPosts = (req, res) => {
     // populate('schema', 'the things from schemas')    
@@ -72,7 +100,7 @@ exports.createPost = (req, res, next) => {
 };
 
 exports.postByUser = (req, res) => {
-    Post.find({postedBy: req.profile._id})
+    Post.find({ postedBy: req.profile._id })
     .populate('postedBy', "id name") // posted의 id 와 name
     .sort('-createdAt')
     .exec((err, posts) => {
