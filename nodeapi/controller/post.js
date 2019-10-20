@@ -2,6 +2,22 @@ const Post = require('../model/post');
 const formidable = require('formidable');
 const fs = require('fs');
 
+// post에서 postedById(그 포스트를 작성한 user) 가져오기(수정 삭제등 할 때 사용)
+// for route params
+exports.postById = (req, res, next, id) => {
+    Post.findById(id)
+    .populate('postedBy', '_id name')
+    .exec((err, post) => {
+        if(err || !post){
+            return res.status(400).json({
+                error: err
+            })
+        }
+        req.post = post
+        next();
+    });
+};
+
 exports.getPosts = (req, res) => {
     // populate('schema', 'the things from schemas')    
     Post.find().populate("postedBy", "_id name")
@@ -53,5 +69,19 @@ exports.createPost = (req, res, next) => {
     //         post: result
     //     })
     // })
-    
 };
+
+exports.postByUser = (req, res) => {
+    Post.find({postedBy: req.profile._id})
+    .populate('postedBy', "id name") // posted의 id 와 name
+    .sort('-createdAt')
+    .exec((err, posts) => {
+        if(err){
+            return res.status(400).json({
+                error: err
+            })
+        };
+        res.json(posts)
+    });
+};
+
