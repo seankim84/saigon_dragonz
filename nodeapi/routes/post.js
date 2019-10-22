@@ -13,7 +13,7 @@ const { requireSignin } = require('../controller/auth');
 const { userById } = require('../controller/user'); 
 const validator = require('../validator');
 
-router.get('/', getPosts);
+router.get('/posts', getPosts);
 router.post('/post/new/:userId', 
     requireSignin, 
     createPost,

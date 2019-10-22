@@ -5,7 +5,7 @@ const morgan = require('morgan');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
-
+const fs = require('fs');
 //따로 {check를 안불러와도 사용가능}
 const expressValidator = require('express-validator');
 const app = express();
@@ -28,6 +28,20 @@ mongoose.connection.on('error', err => {
 const authRoutes = require('./routes/auth');
 const postRoutes = require('./routes/post');
 const userRoutes = require('./routes/user');
+
+// api docs
+app.get('/', (req, res) => {
+    fs.readFile('docs/apiDocs.json', (err, data) => {
+        if(err) {
+            res.status(400).json({
+                error: err
+            })
+        };
+        const docs = JSON.parse(data);
+        res.json(docs);
+    })
+})
+
 //middleware => route 보다 먼저 선언
 app.use(morgan('dev')); // check the connection status
 app.use(bodyParser.json()); // for Json Parser
